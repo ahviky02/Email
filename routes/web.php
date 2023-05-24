@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Spatie\FlareClient\Api;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/compose', [App\Http\Controllers\PostController::class, 'compose'])->name('compose');
+Route::get('/inbox', [App\Http\Controllers\PostController::class, 'inbox'])->name('inbox');
+Route::get('/send', [App\Http\Controllers\PostController::class, 'send'])->name('send');
+// Route::post('/send', [App\Http\Controllers\PostController::class, 'send']);
+
+// post routes
+
+Route::post('/compose', [App\Http\Controllers\PostController::class, 'composeSubmit']);
