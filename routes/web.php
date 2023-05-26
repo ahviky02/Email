@@ -24,6 +24,21 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/compose', [App\Http\Controllers\PostController::class, 'compose'])->name('compose');
 Route::get('/inbox', [App\Http\Controllers\PostController::class, 'inbox'])->name('inbox');
 Route::get('/send', [App\Http\Controllers\PostController::class, 'send'])->name('send');
+// Route::get('/index-read/{data}', [App\Http\Controllers\PostController::class, 'inboxRead'])->name('inboxRead');
+Route::get('/index-read', function (Illuminate\Http\Request $request) {
+    $data = json_decode(urldecode($request->query('data')));
+    return view('pages.inboxRead', compact('data'));
+})->name('read-page');
+
+Route::get('/send-read', function (Illuminate\Http\Request $request) {
+    $data = json_decode(urldecode($request->query('data')));
+    return view('pages.sendRead', compact('data'));
+})->name('read-send-page');
+
+// Route::get('/delete', [App\Http\Controllers\PostController::class, 'delete'])->name('del');
+
+Route::delete('/delete/{id}', [App\Http\Controllers\PostController::class, 'delete'])->name('del');
+
 // Route::post('/send', [App\Http\Controllers\PostController::class, 'send']);
 
 // post routes

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Compose as compose;
 use App\Models\inbox;
 use App\Models\Sender as send;
+use App\Models\Delete as item;
 use App\Models\Users as user;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,5 +68,21 @@ class PostController extends Controller
         $receiver = Inbox::where('receiver', Auth::user()->email)->get();
         $data = compact('receiver');
         return view('pages.inbox')->with($data);
+    }
+
+    // public function inboxRead($data)
+    // {
+    //     return view('pages.inboxRead', ['data' => $data]);
+    // }
+
+    public function delete($id)
+    {
+
+        $item = item::findOrFail($id);
+
+        // Perform the delete operation
+        $item->delete();
+
+        return redirect()->back();
     }
 }

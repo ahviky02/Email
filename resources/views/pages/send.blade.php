@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@push('confirm')
+<script>
+
+</script>
+@endpush
+
 @section('content')
 <div style="border: 0px solid black;height:170mm;">
     <!-- menu list  -->
@@ -27,6 +33,7 @@
     </section>
 
     <!-- main body -->
+    @stack('confirm')
     <section style="display: inline-flex; width:75%">
         <table class="sendTable" style="border: 0px solid black; width:320mm; margin-left:20mm;">
             <thead>
@@ -47,11 +54,23 @@
                     </td>
 
                     <td>
-                        <span class="message">{{$i->message}}</span>
+                        <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}"
+                            style="text-decoration: none; color:black">
+                            <span class="message">{{$i->message}}</span>
+                        </a>
 
                     </td>
                     <td>
                         <span class="date">{{$i->created_at}}</span>
+                    </td>
+
+                    <td>
+                        <form action="{{ route('del', ['id' => $i]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-success">Delete</button>
+                        </form>
+
                     </td>
 
                 </tr>
