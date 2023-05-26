@@ -41,6 +41,9 @@ Route::delete('/delete/{id}', [App\Http\Controllers\PostController::class, 'dele
 
 // Route::post('/send', [App\Http\Controllers\PostController::class, 'send']);
 
+Route::get('/download/{filename}', [App\Http\Controllers\PostController::class, 'download'])->name('file.download');
+
+
 // post routes
 
 Route::post('/compose', [App\Http\Controllers\PostController::class, 'composeSubmit']);

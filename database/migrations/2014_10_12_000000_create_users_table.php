@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('dob');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('file_name');
             $table->rememberToken();
             $table->timestamps();
         });

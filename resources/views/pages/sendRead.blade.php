@@ -65,6 +65,16 @@ function goBack() {
                     </td>
 
                 </tr>
+
+                <tr>
+                    <td>
+                        <a href="{{ route('file.download', ['filename' => $data->file_name]) }}">
+
+                            <b>{{$data->file_name}}</b>
+                            <button class="btn btn-success"><i class="bi bi-download"></i></button>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </table>
 

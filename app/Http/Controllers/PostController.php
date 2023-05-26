@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 use App\Models\Compose as compose;
@@ -25,12 +25,19 @@ class PostController extends Controller
     public function composeSubmit(Request $request)
     {
 
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->storeAs('uploads', $fileName);
+
+
         $composer = new compose;
         $composer->sender = $request['sender'];
         $composer->receiver = $request['receiver'];
         $composer->subject = $request['subject'];
         $composer->message = $request['message'];
         $composer->status = 0;
+        $composer->file_name = $fileName;
+
         $composer->save();
 
         return redirect(route('compose'));
@@ -84,5 +91,16 @@ class PostController extends Controller
         $item->delete();
 
         return redirect()->back();
+    }
+
+    public function download($filename)
+    {
+        $filePath = storage_path('app/uploads/' . $filename);
+
+        if (file_exists($filePath)) {
+            return response()->download($filePath);
+        } else {
+            // Handle file not found error
+        }
     }
 }
