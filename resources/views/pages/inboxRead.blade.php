@@ -2,9 +2,9 @@
 
 @push('scripts')
 <script>
-    function goBack() {
-        window.history.back();
-    }
+function goBack() {
+    window.history.back();
+}
 </script>
 @endpush
 
@@ -40,7 +40,8 @@
     <section style="display: inline-flex; width:75%" id="part-2">
         <table style="border: 0px solid black; width:320mm; margin-left:20mm;">
             <thead>
-                <th><button style="float: right; margin-right:30mm;" class="btn btn-danger"><i class="bi bi-x" onclick="goBack()"></i></button></th>
+                <th><button style="float: right; margin-right:30mm;" class="btn btn-danger"><i class="bi bi-x"
+                            onclick="goBack()"></i></button></th>
             </thead>
             <tbody>
 
@@ -61,6 +62,15 @@
                         {{$data->message}}
                     </td>
 
+                </tr>
+                <tr>
+                    <td>
+                        <a href="{{ route('file.download', ['filename' => $data->file_name]) }}">
+
+                            <b>{{$data->file_name}}</b>
+                            <button class="btn btn-success"><i class="bi bi-download"></i></button>
+                        </a>
+                    </td>
                 </tr>
             </tbody>
         </table>
