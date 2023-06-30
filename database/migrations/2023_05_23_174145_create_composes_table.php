@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('receiver');
             $table->string('subject');
             $table->string('message');
+            $table->string('file_name')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });

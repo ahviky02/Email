@@ -26,17 +26,31 @@ class PostController extends Controller
     {
 
         $file = $request->file('file');
-        $fileName = $file->getClientOriginalName();
-        $file->storeAs('uploads', $fileName);
+        if (is_null($file)) {
+
+            $composer = new compose;
+            $composer->sender = $request['sender'];
+            $composer->receiver = $request['receiver'];
+            $composer->subject = $request['subject'];
+            $composer->message = $request['message'];
+            $composer->file_name = null;
+
+            $composer->status = 0;
+        } else {
+            $fileName = $file->getClientOriginalName();
+            $file->storeAs('uploads', $fileName);
+            $composer = new compose;
+            $composer->sender = $request['sender'];
+            $composer->receiver = $request['receiver'];
+            $composer->subject = $request['subject'];
+            $composer->message = $request['message'];
+            $composer->status = 0;
+            $composer->file_name = $fileName;
+        }
 
 
-        $composer = new compose;
-        $composer->sender = $request['sender'];
-        $composer->receiver = $request['receiver'];
-        $composer->subject = $request['subject'];
-        $composer->message = $request['message'];
-        $composer->status = 0;
-        $composer->file_name = $fileName;
+
+
 
         $composer->save();
 

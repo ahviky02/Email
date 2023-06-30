@@ -54,10 +54,7 @@
                     </td>
 
                     <td>
-                        <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}"
-                            style="text-decoration: none; color:black">
-                            <span class="message">{{$i->message}}</span>
-                        </a>
+                        <span class="message">{{$i->message}}</span>
 
                     </td>
                     <td>
@@ -65,10 +62,16 @@
                     </td>
 
                     <td>
+                        <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}" style="text-decoration: none; color:black">
+                            <button class="btn btn-success">Open</button>
+                        </a>
+                    </td>
+
+                    <td>
                         <form action="{{ route('del', ['id' => $i]) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-success">Delete</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
 
                     </td>

@@ -2,9 +2,9 @@
 
 @push('scripts')
 <script>
-function read(index) {
+    function read(index) {
 
-}
+    }
 </script>
 @endpush
 
@@ -55,21 +55,26 @@ function read(index) {
                         <span class="email">{{$i->subject}}</span>
                     </td>
 
-                    <td style="padding:10px; cursor:pointer"><a
-                            href="{{ route('read-page') }}?data={{ urlencode(json_encode($i)) }}"
-                            style="text-decoration: none; color:black">
-                            <span class="message">{{$i->message}}</span>
-                        </a>
+                    <td style="padding:10px; cursor:pointer">
+                        <span class="message">{{$i->message}}</span>
+
                     </td>
                     <td>
                         <span class="date" style="padding:10px; cursor:pointer">{{$i->created_at}}</span>
                     </td>
 
                     <td>
+                        <a href="{{ route('read-page') }}?data={{ urlencode(json_encode($i)) }}" style="text-decoration: none; color:black">
+                            <button class="btn btn-success">Open</button>
+                        </a>
+
+                    </td>
+
+                    <td>
                         <form action="{{ route('del', ['id' => $i]) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-success">Delete</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>
 

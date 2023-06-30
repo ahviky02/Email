@@ -67,13 +67,18 @@ function goBack() {
                 </tr>
 
                 <tr>
+                    @if(is_null($data->file_name))
+                    <td>
+                        No File Found
+                    </td>
+                    @else
                     <td>
                         <a href="{{ route('file.download', ['filename' => $data->file_name]) }}">
-
-                            <b>{{$data->file_name}}</b>
+                            <b>{{ $data->file_name }}</b>
                             <button class="btn btn-success"><i class="bi bi-download"></i></button>
                         </a>
                     </td>
+                    @endif
                 </tr>
             </tbody>
         </table>
