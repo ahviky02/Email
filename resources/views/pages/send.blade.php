@@ -54,15 +54,19 @@
                     </td>
 
                     <td>
-                        <span class="message">{{$i->message}}</span>
-
+                        <span class="message"
+                            style="display: inline-block; width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{$i->message}}
+                        </span>
                     </td>
+
                     <td>
                         <span class="date">{{$i->created_at}}</span>
                     </td>
 
                     <td>
-                        <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}" style="text-decoration: none; color:black">
+                        <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}"
+                            style="text-decoration: none; color:black">
                             <button class="btn btn-success">Open</button>
                         </a>
                     </td>

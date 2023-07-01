@@ -2,9 +2,9 @@
 
 @push('scripts')
 <script>
-    function read(index) {
+function read(index) {
 
-    }
+}
 </script>
 @endpush
 
@@ -55,16 +55,20 @@
                         <span class="email">{{$i->subject}}</span>
                     </td>
 
-                    <td style="padding:10px; cursor:pointer">
-                        <span class="message">{{$i->message}}</span>
-
+                    <td>
+                        <span class="message"
+                            style="display: inline-block; width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{$i->message}}
+                        </span>
                     </td>
+
                     <td>
                         <span class="date" style="padding:10px; cursor:pointer">{{$i->created_at}}</span>
                     </td>
 
                     <td>
-                        <a href="{{ route('read-page') }}?data={{ urlencode(json_encode($i)) }}" style="text-decoration: none; color:black">
+                        <a href="{{ route('read-page') }}?data={{ urlencode(json_encode($i)) }}"
+                            style="text-decoration: none; color:black">
                             <button class="btn btn-success">Open</button>
                         </a>
 
