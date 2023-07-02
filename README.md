@@ -34,6 +34,11 @@ This repository contains an email project developed using the Laravel framework.
 6. Generate the application key by running `php artisan key:generate`.
 7. Launch the web application in a web browser.
 
+## Screenshots
+
+![Image 2](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_15437_localhost.jpeg)
+
+
 ## Usage
 
 1. Sign up for a new account or log in with existing credentials.
