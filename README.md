@@ -37,6 +37,11 @@ This repository contains an email project developed using the Laravel framework.
 ## Screenshots
 
 ![Image 2](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_15437_localhost.jpeg)
+![Image 3](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_21042_localhost.jpeg)
+![Image 4](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_2115_localhost.jpeg)
+![Image 5](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_21553_localhost.jpeg)
+![Image 6](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_2169_localhost.jpeg)
+![Image 7](https://github.com/ahviky02/Email/raw/main/resources/images/Web%20capture_2-7-2023_2759_localhost.jpeg)
 
 
 ## Usage
