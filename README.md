@@ -21,6 +21,8 @@ This repository contains an email project developed using the Laravel framework.
 - HTML
 - CSS
 - JavaScript
+- Jquery
+- Bootstarp
 - PHP
 - MySQL
 
@@ -31,8 +33,9 @@ This repository contains an email project developed using the Laravel framework.
 3. Import the included database schema to create the necessary tables. The SQL file is available in the `database` folder.
 4. Update the database connection settings in the `.env` file.
 5. Install the required dependencies by running `composer install` in the project's root directory.
-6. Generate the application key by running `php artisan key:generate`.
-7. Launch the web application in a web browser.
+6. migrate `php artisan migrate`.
+7. cmd `php artisan serve`.
+8. Launch the web application in a web browser.
 
 ## Screenshots
 
