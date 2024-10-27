@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\TextUI\Command;
 
+use const PHP_EOL;
 use function sprintf;
 use function str_replace;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +19,8 @@ use PHPUnit\TextUI\Configuration\Registry;
 use RecursiveIteratorIterator;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class ListTestsAsTextCommand implements Command
@@ -40,7 +43,7 @@ final class ListTestsAsTextCommand implements Command
                 $name = sprintf(
                     '%s::%s',
                     $test::class,
-                    str_replace(' with data set ', '', $test->nameWithDataSet())
+                    str_replace(' with data set ', '', $test->nameWithDataSet()),
                 );
             } elseif ($test instanceof PhptTestCase) {
                 $name = $test->getName();
@@ -50,7 +53,7 @@ final class ListTestsAsTextCommand implements Command
 
             $buffer .= sprintf(
                 ' - %s' . PHP_EOL,
-                $name
+                $name,
             );
         }
 

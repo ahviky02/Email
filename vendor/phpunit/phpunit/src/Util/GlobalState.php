@@ -32,6 +32,8 @@ use function var_export;
 use Closure;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class GlobalState
@@ -188,7 +190,7 @@ final class GlobalState
             $result .= sprintf(
                 '@ini_set(%s, %s);' . "\n",
                 self::exportVariable($key),
-                self::exportVariable((string) $value)
+                self::exportVariable((string) $value),
             );
         }
 
@@ -206,7 +208,7 @@ final class GlobalState
                     'if (!defined(\'%s\')) define(\'%s\', %s);' . "\n",
                     $name,
                     $name,
-                    self::exportVariable($value)
+                    self::exportVariable($value),
                 );
             }
         }
@@ -229,7 +231,7 @@ final class GlobalState
                         '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
                         $superGlobalArray,
                         $key,
-                        self::exportVariable($GLOBALS[$superGlobalArray][$key])
+                        self::exportVariable($GLOBALS[$superGlobalArray][$key]),
                     );
                 }
             }
@@ -243,7 +245,7 @@ final class GlobalState
                 $result .= sprintf(
                     '$GLOBALS[\'%s\'] = %s;' . "\n",
                     $key,
-                    self::exportVariable($GLOBALS[$key])
+                    self::exportVariable($GLOBALS[$key]),
                 );
             }
         }

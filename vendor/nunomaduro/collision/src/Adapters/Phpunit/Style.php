@@ -6,6 +6,7 @@ namespace NunoMaduro\Collision\Adapters\Phpunit;
 
 use Closure;
 use NunoMaduro\Collision\Adapters\Phpunit\Printers\DefaultPrinter;
+use NunoMaduro\Collision\Adapters\Phpunit\Support\ResultReflection;
 use NunoMaduro\Collision\Exceptions\ShouldNotHappen;
 use NunoMaduro\Collision\Exceptions\TestException;
 use NunoMaduro\Collision\Exceptions\TestOutcome;
@@ -22,12 +23,13 @@ use ReflectionClass;
 use ReflectionFunction;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
-use function Termwind\render;
-use function Termwind\renderUsing;
 use Termwind\Terminal;
-use function Termwind\terminal;
 use Whoops\Exception\Frame;
 use Whoops\Exception\Inspector;
+
+use function Termwind\render;
+use function Termwind\renderUsing;
+use function Termwind\terminal;
 
 /**
  * @internal
@@ -53,7 +55,7 @@ final class Style
     public function __construct(ConsoleOutputInterface $output)
     {
         if (! $output instanceof ConsoleOutput) {
-            throw new ShouldNotHappen();
+            throw new ShouldNotHappen;
         }
 
         $this->terminal = terminal();
@@ -171,7 +173,7 @@ final class Style
 
         array_map(function (TestResult $testResult): void {
             if (! $testResult->throwable instanceof Throwable) {
-                throw new ShouldNotHappen();
+                throw new ShouldNotHappen;
             }
 
             renderUsing($this->output);
@@ -240,7 +242,7 @@ final class Style
             }
         }
 
-        $pending = $result->numberOfTests() - $result->numberOfTestsRun();
+        $pending = ResultReflection::numberOfTests($result) - $result->numberOfTestsRun();
         if ($pending > 0) {
             $tests[] = "\e[2m$pending pending\e[22m";
         }
@@ -325,7 +327,7 @@ final class Style
      */
     public function writeError(Throwable $throwable): void
     {
-        $writer = (new Writer())->setOutput($this->output);
+        $writer = (new Writer)->setOutput($this->output);
 
         $throwable = new TestException($throwable, $this->output->isVerbose());
 

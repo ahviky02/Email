@@ -10,6 +10,7 @@
 namespace PHPUnit\Framework\Constraint;
 
 use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 use function explode;
 use function implode;
 use function preg_match;
@@ -46,9 +47,9 @@ final class StringMatchesFormatDescription extends Constraint
 
         $matches = preg_match(
             $this->regularExpressionForFormatDescription(
-                $this->convertNewlines($this->formatDescription)
+                $this->convertNewlines($this->formatDescription),
             ),
-            $other
+            $other,
         );
 
         return $matches > 0;
@@ -86,18 +87,19 @@ final class StringMatchesFormatDescription extends Constraint
             preg_quote($string, '/'),
             [
                 '%%' => '%',
-                '%e' => '\\' . DIRECTORY_SEPARATOR,
+                '%e' => preg_quote(DIRECTORY_SEPARATOR, '/'),
                 '%s' => '[^\r\n]+',
                 '%S' => '[^\r\n]*',
-                '%a' => '.+',
-                '%A' => '.*',
+                '%a' => '.+?',
+                '%A' => '.*?',
                 '%w' => '\s*',
                 '%i' => '[+-]?\d+',
                 '%d' => '\d+',
                 '%x' => '[0-9a-fA-F]+',
-                '%f' => '[+-]?\.?\d+\.?\d*(?:[Ee][+-]?\d+)?',
+                '%f' => '[+-]?(?:\d+|(?=\.\d))(?:\.\d+)?(?:[Ee][+-]?\d+)?',
                 '%c' => '.',
-            ]
+                '%0' => '\x00',
+            ],
         );
 
         return '/^' . $string . '$/s';

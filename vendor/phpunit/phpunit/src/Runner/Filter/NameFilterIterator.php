@@ -14,6 +14,7 @@ use function implode;
 use function preg_match;
 use function sprintf;
 use function str_replace;
+use function substr;
 use Exception;
 use PHPUnit\Framework\SelfDescribing;
 use PHPUnit\Framework\Test;
@@ -23,6 +24,8 @@ use RecursiveFilterIterator;
 use RecursiveIterator;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class NameFilterIterator extends RecursiveFilterIterator
@@ -32,6 +35,9 @@ final class NameFilterIterator extends RecursiveFilterIterator
     private ?int $filterMax = null;
 
     /**
+     * @psalm-param RecursiveIterator<int, Test> $iterator
+     * @psalm-param non-empty-string $filter
+     *
      * @throws Exception
      */
     public function __construct(RecursiveIterator $iterator, string $filter)
@@ -72,7 +78,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
      */
     private function setFilter(string $filter): void
     {
-        if (@preg_match($filter, '') === false) {
+        if (preg_match('/[a-zA-Z0-9]/', substr($filter, 0, 1)) === 1 || @preg_match($filter, '') === false) {
             // Handles:
             //  * testAssertEqualsSucceeds#4
             //  * testAssertEqualsSucceeds#4-8
@@ -80,7 +86,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
                 if (isset($matches[3]) && $matches[2] < $matches[3]) {
                     $filter = sprintf(
                         '%s.*with data set #(\d+)$',
-                        $matches[1]
+                        $matches[1],
                     );
 
                     $this->filterMin = (int) $matches[2];
@@ -89,7 +95,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
                     $filter = sprintf(
                         '%s.*with data set #%s$',
                         $matches[1],
-                        $matches[2]
+                        $matches[2],
                     );
                 }
             } // Handles:
@@ -99,7 +105,7 @@ final class NameFilterIterator extends RecursiveFilterIterator
                 $filter = sprintf(
                     '%s.*with data set "%s"$',
                     $matches[1],
-                    $matches[2]
+                    $matches[2],
                 );
             }
 
@@ -110,8 +116,8 @@ final class NameFilterIterator extends RecursiveFilterIterator
                 str_replace(
                     '/',
                     '\\/',
-                    $filter
-                )
+                    $filter,
+                ),
             );
         }
 

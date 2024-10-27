@@ -12,6 +12,8 @@ namespace PHPUnit\Framework;
 use function sprintf;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class ComparisonMethodDoesNotDeclareExactlyOneParameterException extends Exception
@@ -22,8 +24,8 @@ final class ComparisonMethodDoesNotDeclareExactlyOneParameterException extends E
             sprintf(
                 'Comparison method %s::%s() does not declare exactly one parameter.',
                 $className,
-                $methodName
-            )
+                $methodName,
+            ),
         );
     }
 }

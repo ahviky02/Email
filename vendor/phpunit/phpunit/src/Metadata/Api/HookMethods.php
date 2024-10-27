@@ -17,6 +17,8 @@ use PHPUnit\Util\Reflection;
 use ReflectionClass;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class HookMethods
@@ -54,7 +56,7 @@ final class HookMethods
                 if ($metadata->isBeforeClass()->isNotEmpty()) {
                     array_unshift(
                         self::$hookMethods[$className]['beforeClass'],
-                        $methodName
+                        $methodName,
                     );
                 }
 
@@ -66,14 +68,14 @@ final class HookMethods
             if ($metadata->isBefore()->isNotEmpty()) {
                 array_unshift(
                     self::$hookMethods[$className]['before'],
-                    $methodName
+                    $methodName,
                 );
             }
 
             if ($metadata->isPreCondition()->isNotEmpty()) {
                 array_unshift(
                     self::$hookMethods[$className]['preCondition'],
-                    $methodName
+                    $methodName,
                 );
             }
 

@@ -12,6 +12,7 @@ namespace PHPUnit\Framework;
 use function assert;
 use PHPUnit\Metadata\Api\DataProvider;
 use PHPUnit\Metadata\Api\Groups;
+use PHPUnit\Metadata\Api\Requirements;
 use PHPUnit\Metadata\BackupGlobals;
 use PHPUnit\Metadata\BackupStaticProperties;
 use PHPUnit\Metadata\ExcludeGlobalVariableFromBackup;
@@ -22,6 +23,8 @@ use PHPUnit\TextUI\Configuration\Registry as ConfigurationRegistry;
 use ReflectionClass;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestBuilder
@@ -35,34 +38,35 @@ final class TestBuilder
     {
         $className = $theClass->getName();
 
-        $data = (new DataProvider)->providedData(
-            $className,
-            $methodName
-        );
+        $data = null;
+
+        if ($this->requirementsSatisfied($className, $methodName)) {
+            $data = (new DataProvider)->providedData($className, $methodName);
+        }
 
         if ($data !== null) {
-            $test = $this->buildDataProviderTestSuite(
+            return $this->buildDataProviderTestSuite(
                 $methodName,
                 $className,
                 $data,
                 $this->shouldTestMethodBeRunInSeparateProcess($className, $methodName),
                 $this->shouldGlobalStateBePreserved($className, $methodName),
                 $this->shouldAllTestMethodsOfTestClassBeRunInSingleSeparateProcess($className),
-                $this->backupSettings($className, $methodName)
+                $this->backupSettings($className, $methodName),
             );
-        } else {
-            $test = new $className($methodName);
         }
 
-        if ($test instanceof TestCase) {
-            $this->configureTestCase(
-                $test,
-                $this->shouldTestMethodBeRunInSeparateProcess($className, $methodName),
-                $this->shouldGlobalStateBePreserved($className, $methodName),
-                $this->shouldAllTestMethodsOfTestClassBeRunInSingleSeparateProcess($className),
-                $this->backupSettings($className, $methodName)
-            );
-        }
+        $test = new $className($methodName);
+
+        assert($test instanceof TestCase);
+
+        $this->configureTestCase(
+            $test,
+            $this->shouldTestMethodBeRunInSeparateProcess($className, $methodName),
+            $this->shouldGlobalStateBePreserved($className, $methodName),
+            $this->shouldAllTestMethodsOfTestClassBeRunInSingleSeparateProcess($className),
+            $this->backupSettings($className, $methodName),
+        );
 
         return $test;
     }
@@ -75,7 +79,7 @@ final class TestBuilder
     private function buildDataProviderTestSuite(string $methodName, string $className, array $data, bool $runTestInSeparateProcess, ?bool $preserveGlobalState, bool $runClassInSeparateProcess, array $backupSettings): DataProviderTestSuite
     {
         $dataProviderTestSuite = DataProviderTestSuite::empty(
-            $className . '::' . $methodName
+            $className . '::' . $methodName,
         );
 
         $groups = (new Groups)->groups($className, $methodName);
@@ -92,7 +96,7 @@ final class TestBuilder
                 $runTestInSeparateProcess,
                 $preserveGlobalState,
                 $runClassInSeparateProcess,
-                $backupSettings
+                $backupSettings,
             );
 
             $dataProviderTestSuite->addTest($_test, $groups);
@@ -265,5 +269,14 @@ final class TestBuilder
     private function shouldAllTestMethodsOfTestClassBeRunInSingleSeparateProcess(string $className): bool
     {
         return MetadataRegistry::parser()->forClass($className)->isRunClassInSeparateProcess()->isNotEmpty();
+    }
+
+    /**
+     * @psalm-param class-string     $className
+     * @psalm-param non-empty-string $methodName
+     */
+    private function requirementsSatisfied(string $className, string $methodName): bool
+    {
+        return (new Requirements)->requirementsNotSatisfiedFor($className, $methodName) === [];
     }
 }

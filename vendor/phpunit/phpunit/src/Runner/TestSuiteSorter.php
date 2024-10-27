@@ -27,6 +27,8 @@ use PHPUnit\Runner\ResultCache\NullResultCache;
 use PHPUnit\Runner\ResultCache\ResultCache;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestSuiteSorter
@@ -207,7 +209,7 @@ final class TestSuiteSorter
     {
         usort(
             $tests,
-            fn ($left, $right) => $this->cmpDefectPriorityAndTime($left, $right)
+            fn ($left, $right) => $this->cmpDefectPriorityAndTime($left, $right),
         );
 
         return $tests;
@@ -217,7 +219,7 @@ final class TestSuiteSorter
     {
         usort(
             $tests,
-            fn ($left, $right) => $this->cmpDuration($left, $right)
+            fn ($left, $right) => $this->cmpDuration($left, $right),
         );
 
         return $tests;
@@ -227,7 +229,7 @@ final class TestSuiteSorter
     {
         usort(
             $tests,
-            fn ($left, $right) => $this->cmpSize($left, $right)
+            fn ($left, $right) => $this->cmpSize($left, $right),
         );
 
         return $tests;

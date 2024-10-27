@@ -34,13 +34,17 @@
 
     <!-- main body -->
     @stack('confirm')
-    <section style="display: inline-flex; width:75%">
-        <table class="sendTable" style="border: 0px solid black; width:320mm; margin-left:20mm;">
+    <section style="display: inline-block; width:75%">
+    <div class="d-block w-100">
+            <input type="search" id="sendSearch" class="form-control" placeholder="Search email" style="width: 100%; margin-bottom: 10px;">
+        </div>
+        <table class="sendTable" id="sendTable" style="border: 0px solid black; width:90%; margin-left:20mm;">
             <thead>
                 <th>Email</th>
                 <th>Subject</th>
                 <th>Message</th>
                 <th>Date</th>
+                <th>Action</th>
             </thead>
             <tbody>
                 @foreach($send as $i)
@@ -64,21 +68,16 @@
                         <span class="date">{{$i->created_at}}</span>
                     </td>
 
-                    <td>
+                    <td class="d-flex gap-3">
                         <a href="{{ route('read-send-page') }}?data={{ urlencode(json_encode($i)) }}"
                             style="text-decoration: none; color:black">
                             <button class="btn btn-success">Open</button>
                         </a>
-                    </td>
-
-                    <td>
-                        <form action="{{ route('del', ['id' => $i]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+                        <button class="btn btn-danger delete"  value="{{ $i->id }}">Delete</button>
 
                     </td>
+
+                    
 
                 </tr>
                 @endforeach

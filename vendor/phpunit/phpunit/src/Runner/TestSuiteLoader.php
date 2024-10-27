@@ -22,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestSuiteLoader
@@ -76,6 +78,12 @@ final class TestSuiteLoader
             throw $e;
         }
 
+        foreach ($loadedClasses as $className) {
+            if (str_ends_with(strtolower($className), strtolower($suiteClassName))) {
+                throw new ClassDoesNotExtendTestCaseException($className, $suiteClassFile);
+            }
+        }
+
         throw new ClassCannotBeFoundException($suiteClassName, $suiteClassFile);
     }
 
@@ -109,8 +117,8 @@ final class TestSuiteLoader
         $loadedClasses = array_values(
             array_diff(
                 get_declared_classes(),
-                self::$declaredClasses
-            )
+                self::$declaredClasses,
+            ),
         );
 
         foreach ($loadedClasses as $loadedClass) {

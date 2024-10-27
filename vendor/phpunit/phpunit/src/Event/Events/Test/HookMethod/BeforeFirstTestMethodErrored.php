@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Event\Test;
 
+use const PHP_EOL;
 use function sprintf;
 use PHPUnit\Event\Code;
 use PHPUnit\Event\Code\Throwable;
@@ -77,7 +78,7 @@ final class BeforeFirstTestMethodErrored implements Event
             'Before First Test Method Errored (%s::%s)%s',
             $this->calledMethod->className(),
             $this->calledMethod->methodName(),
-            $message
+            $message,
         );
     }
 }

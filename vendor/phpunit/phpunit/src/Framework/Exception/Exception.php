@@ -11,10 +11,9 @@ namespace PHPUnit\Framework;
 
 use function array_keys;
 use function get_object_vars;
-use PHPUnit\Util\Filter;
-use PHPUnit\Util\ThrowableToStringMapper;
+use function is_int;
+use function sprintf;
 use RuntimeException;
-use Stringable;
 use Throwable;
 
 /**
@@ -37,14 +36,28 @@ use Throwable;
  *
  * @see http://fabien.potencier.org/article/9/php-serialization-stack-traces-and-exceptions
  *
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class Exception extends RuntimeException implements \PHPUnit\Exception, Stringable
+class Exception extends RuntimeException implements \PHPUnit\Exception
 {
     protected array $serializableTrace;
 
-    public function __construct(string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', int|string $code = 0, ?Throwable $previous = null)
     {
+        /**
+         * @see https://github.com/sebastianbergmann/phpunit/issues/5965
+         */
+        if (!is_int($code)) {
+            $message .= sprintf(
+                ' (exception code: %s)',
+                $code,
+            );
+
+            $code = 0;
+        }
+
         parent::__construct($message, $code, $previous);
 
         $this->serializableTrace = $this->getTrace();
@@ -52,20 +65,6 @@ class Exception extends RuntimeException implements \PHPUnit\Exception, Stringab
         foreach (array_keys($this->serializableTrace) as $key) {
             unset($this->serializableTrace[$key]['args']);
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function __toString(): string
-    {
-        $string = ThrowableToStringMapper::map($this);
-
-        if ($trace = Filter::getFilteredStacktrace($this)) {
-            $string .= "\n" . $trace;
-        }
-
-        return $string;
     }
 
     public function __sleep(): array

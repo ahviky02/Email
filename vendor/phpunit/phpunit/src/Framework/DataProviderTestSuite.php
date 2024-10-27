@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestSize\TestSize;
 use PHPUnit\Metadata\Api\Groups;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class DataProviderTestSuite extends TestSuite
@@ -46,7 +48,7 @@ final class DataProviderTestSuite extends TestSuite
     public function provides(): array
     {
         if ($this->providedTests === null) {
-            $this->providedTests = [new ExecutionOrderDependency($this->getName())];
+            $this->providedTests = [new ExecutionOrderDependency($this->name())];
         }
 
         return $this->providedTests;
@@ -67,7 +69,7 @@ final class DataProviderTestSuite extends TestSuite
      */
     public function size(): TestSize
     {
-        [$className, $methodName] = explode('::', $this->getName());
+        [$className, $methodName] = explode('::', $this->name());
 
         return (new Groups)->size($className, $methodName);
     }

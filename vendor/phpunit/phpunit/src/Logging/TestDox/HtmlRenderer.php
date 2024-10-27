@@ -12,6 +12,8 @@ namespace PHPUnit\Logging\TestDox;
 use function sprintf;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class HtmlRenderer
@@ -111,14 +113,14 @@ EOT;
         foreach ($tests as $prettifiedClassName => $_tests) {
             $buffer .= sprintf(
                 self::CLASS_HEADER,
-                $prettifiedClassName
+                $prettifiedClassName,
             );
 
             foreach ($this->reduce($_tests) as $prettifiedMethodName => $outcome) {
                 $buffer .= sprintf(
                     "            <li class=\"%s\">%s</li>\n",
                     $outcome,
-                    $prettifiedMethodName
+                    $prettifiedMethodName,
                 );
             }
 

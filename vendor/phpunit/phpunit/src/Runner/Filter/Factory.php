@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestSuite;
 use ReflectionClass;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Factory
@@ -25,6 +27,19 @@ final class Factory
      */
     private array $filters = [];
 
+    /**
+     * @psalm-param list<non-empty-string> $testIds
+     */
+    public function addTestIdFilter(array $testIds): void
+    {
+        $this->filters[] = [
+            new ReflectionClass(TestIdFilterIterator::class), $testIds,
+        ];
+    }
+
+    /**
+     * @psalm-param list<non-empty-string> $groups
+     */
     public function addExcludeGroupFilter(array $groups): void
     {
         $this->filters[] = [
@@ -32,6 +47,9 @@ final class Factory
         ];
     }
 
+    /**
+     * @psalm-param list<non-empty-string> $groups
+     */
     public function addIncludeGroupFilter(array $groups): void
     {
         $this->filters[] = [
@@ -39,6 +57,9 @@ final class Factory
         ];
     }
 
+    /**
+     * @psalm-param non-empty-string $name
+     */
     public function addNameFilter(string $name): void
     {
         $this->filters[] = [

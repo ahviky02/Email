@@ -100,7 +100,7 @@ final class Reflection
 
 		$hash = [$method->getFileName(), $method->getStartLine(), $method->getEndLine()];
 		if (($alias = $decl->getTraitAliases()[$method->name] ?? null)
-			&& ($m = new \ReflectionMethod($alias))
+			&& ($m = new \ReflectionMethod(...explode('::', $alias, 2)))
 			&& $hash === [$m->getFileName(), $m->getStartLine(), $m->getEndLine()]
 		) {
 			return self::getMethodDeclaringMethod($m);
@@ -125,7 +125,7 @@ final class Reflection
 	public static function areCommentsAvailable(): bool
 	{
 		static $res;
-		return $res ?? $res = (bool) (new \ReflectionMethod(__METHOD__))->getDocComment();
+		return $res ?? $res = (bool) (new \ReflectionMethod(self::class, __FUNCTION__))->getDocComment();
 	}
 
 
@@ -136,7 +136,9 @@ final class Reflection
 		} elseif ($ref instanceof \ReflectionMethod) {
 			return $ref->getDeclaringClass()->name . '::' . $ref->name . '()';
 		} elseif ($ref instanceof \ReflectionFunction) {
-			return $ref->name . '()';
+			return PHP_VERSION_ID >= 80200 && $ref->isAnonymous()
+				? '{closure}()'
+				: $ref->name . '()';
 		} elseif ($ref instanceof \ReflectionProperty) {
 			return self::getPropertyDeclaringClass($ref)->name . '::$' . $ref->name;
 		} elseif ($ref instanceof \ReflectionParameter) {
@@ -188,7 +190,7 @@ final class Reflection
 	}
 
 
-	/** @return array of [alias => class] */
+	/** @return array<string, class-string> of [alias => class] */
 	public static function getUseStatements(\ReflectionClass $class): array
 	{
 		if ($class->isAnonymous()) {
@@ -221,7 +223,8 @@ final class Reflection
 			$tokens = [];
 		}
 
-		$namespace = $class = $classLevel = $level = null;
+		$namespace = $class = null;
+		$classLevel = $level = 0;
 		$res = $uses = [];
 
 		$nameTokens = [T_STRING, T_NS_SEPARATOR, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED];
@@ -290,7 +293,7 @@ final class Reflection
 
 				case ord('}'):
 					if ($level === $classLevel) {
-						$class = $classLevel = null;
+						$class = $classLevel = 0;
 					}
 
 					$level--;

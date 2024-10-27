@@ -9,11 +9,14 @@
  */
 namespace PHPUnit\TextUI\Command;
 
+use const PHP_EOL;
 use function sprintf;
 use PHPUnit\TextUI\Configuration\Registry;
 use PHPUnit\TextUI\Configuration\TestSuiteCollection;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class ListTestSuitesCommand implements Command
@@ -33,7 +36,7 @@ final class ListTestSuitesCommand implements Command
         foreach ($this->suites as $suite) {
             $buffer .= sprintf(
                 ' - %s' . PHP_EOL,
-                $suite->name()
+                $suite->name(),
             );
         }
 

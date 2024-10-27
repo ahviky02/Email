@@ -12,6 +12,8 @@ namespace PHPUnit\Event\Telemetry;
 use function gc_status;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Php83GarbageCollectorStatusProvider implements GarbageCollectorStatusProvider
@@ -25,6 +27,10 @@ final class Php83GarbageCollectorStatusProvider implements GarbageCollectorStatu
             $status['collected'],
             $status['threshold'],
             $status['roots'],
+            $status['application_time'],
+            $status['collector_time'],
+            $status['destructor_time'],
+            $status['free_time'],
             $status['running'],
             $status['protected'],
             $status['full'],

@@ -15,6 +15,8 @@ use DOMElement;
 use DOMXPath;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 abstract class LogToReportMigration implements Migration
@@ -67,7 +69,7 @@ abstract class LogToReportMigration implements Migration
     private function findLogNode(DOMDocument $document): ?DOMElement
     {
         $logNode = (new DOMXPath($document))->query(
-            sprintf('//logging/log[@type="%s"]', $this->forType())
+            sprintf('//logging/log[@type="%s"]', $this->forType()),
         )->item(0);
 
         if (!$logNode instanceof DOMElement) {

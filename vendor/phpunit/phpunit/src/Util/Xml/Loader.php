@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Util\Xml;
 
+use const PHP_OS_FAMILY;
 use function chdir;
 use function dirname;
 use function error_reporting;
@@ -20,6 +21,8 @@ use function sprintf;
 use DOMDocument;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Loader
@@ -37,9 +40,9 @@ final class Loader
         if ($contents === false) {
             throw new XmlException(
                 sprintf(
-                    'Could not read "%s".',
-                    $filename
-                )
+                    'Could not read XML from file "%s"',
+                    $filename,
+                ),
             );
         }
 
@@ -52,7 +55,16 @@ final class Loader
     public function load(string $actual, ?string $filename = null): DOMDocument
     {
         if ($actual === '') {
-            throw new XmlException('Could not load XML from empty string');
+            if ($filename === null) {
+                throw new XmlException('Could not parse XML from empty string');
+            }
+
+            throw new XmlException(
+                sprintf(
+                    'Could not parse XML from empty file "%s"',
+                    $filename,
+                ),
+            );
         }
 
         $document                     = new DOMDocument;
@@ -65,7 +77,7 @@ final class Loader
         // Required for XInclude
         if ($filename !== null) {
             // Required for XInclude on Windows
-            if (DIRECTORY_SEPARATOR === '\\') {
+            if (PHP_OS_FAMILY === 'Windows') {
                 $cwd = getcwd();
                 @chdir(dirname($filename));
             }
@@ -94,10 +106,10 @@ final class Loader
             if ($filename !== null) {
                 throw new XmlException(
                     sprintf(
-                        'Could not load "%s".%s',
+                        'Could not load "%s"%s',
                         $filename,
-                        $message !== '' ? "\n" . $message : ''
-                    )
+                        $message !== '' ? ":\n" . $message : '',
+                    ),
                 );
             }
 

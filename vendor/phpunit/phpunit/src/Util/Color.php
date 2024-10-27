@@ -26,6 +26,8 @@ use function strtr;
 use function trim;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class Color
@@ -133,7 +135,7 @@ final class Color
             $path[$last] = preg_replace_callback(
                 '/([\-_.]+|phpt$)/',
                 static fn ($matches) => self::dim($matches[0]),
-                $path[$last]
+                $path[$last],
             );
         }
 
@@ -156,7 +158,7 @@ final class Color
         return preg_replace_callback(
             '/\s+/',
             static fn ($matches) => self::dim(strtr($matches[0], $replaceMap)),
-            $buffer
+            $buffer,
         );
     }
 
@@ -173,7 +175,7 @@ final class Color
                 "\e[$1;$2m",
                 '$2',
             ],
-            $buffer
+            $buffer,
         );
     }
 }

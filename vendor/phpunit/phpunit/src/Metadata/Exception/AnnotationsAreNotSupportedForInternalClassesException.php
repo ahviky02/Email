@@ -10,12 +10,15 @@
 namespace PHPUnit\Metadata;
 
 use function sprintf;
+use PHPUnit\Exception;
 use RuntimeException;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final class AnnotationsAreNotSupportedForInternalClassesException extends RuntimeException implements \PHPUnit\Exception
+final class AnnotationsAreNotSupportedForInternalClassesException extends RuntimeException implements Exception
 {
     /**
      * @psalm-param class-string $className
@@ -25,8 +28,8 @@ final class AnnotationsAreNotSupportedForInternalClassesException extends Runtim
         parent::__construct(
             sprintf(
                 'Annotations can only be parsed for user-defined classes, trying to parse annotations for class "%s"',
-                $className
-            )
+                $className,
+            ),
         );
     }
 }

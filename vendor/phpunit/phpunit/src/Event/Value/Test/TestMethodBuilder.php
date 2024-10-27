@@ -9,18 +9,24 @@
  */
 namespace PHPUnit\Event\Code;
 
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+use const DEBUG_BACKTRACE_PROVIDE_OBJECT;
 use function assert;
+use function debug_backtrace;
 use function is_numeric;
+use PHPUnit\Event\Facade as EventFacade;
 use PHPUnit\Event\TestData\DataFromDataProvider;
 use PHPUnit\Event\TestData\DataFromTestDependency;
 use PHPUnit\Event\TestData\MoreThanOneDataSetFromDataProviderException;
 use PHPUnit\Event\TestData\TestDataCollection;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Metadata\Parser\Registry as MetadataRegistry;
+use PHPUnit\Util\Exporter;
 use PHPUnit\Util\Reflection;
-use SebastianBergmann\Exporter\Exporter;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestMethodBuilder
@@ -48,6 +54,20 @@ final class TestMethodBuilder
     }
 
     /**
+     * @throws NoTestCaseObjectOnCallStackException
+     */
+    public static function fromCallStack(): TestMethod
+    {
+        foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+            if (isset($frame['object']) && $frame['object'] instanceof TestCase) {
+                return $frame['object']->valueObjectForEvents();
+            }
+        }
+
+        throw new NoTestCaseObjectOnCallStackException;
+    }
+
+    /**
      * @throws MoreThanOneDataSetFromDataProviderException
      */
     private static function dataFor(TestCase $testCase): TestDataCollection
@@ -63,13 +83,14 @@ final class TestMethodBuilder
 
             $testData[] = DataFromDataProvider::from(
                 $dataSetName,
-                (new Exporter)->export($testCase->providedData())
+                Exporter::export($testCase->providedData(), EventFacade::emitter()->exportsObjects()),
+                $testCase->dataSetAsStringWithData(),
             );
         }
 
         if ($testCase->hasDependencyInput()) {
             $testData[] = DataFromTestDependency::from(
-                (new Exporter)->export($testCase->dependencyInput())
+                Exporter::export($testCase->dependencyInput(), EventFacade::emitter()->exportsObjects()),
             );
         }
 

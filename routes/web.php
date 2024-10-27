@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\FlareClient\Api;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,8 @@ Route::get('/send-read', function (Illuminate\Http\Request $request) {
 // Route::get('/delete', [App\Http\Controllers\PostController::class, 'delete'])->name('del');
 
 Route::delete('/delete/{id}', [App\Http\Controllers\PostController::class, 'delete'])->name('del');
+Route::get('/ajax-search-inbox', [App\Http\Controllers\SearchController::class, 'searchInbox'])->name('ajax-search-inbox');
+Route::get('/ajax-search-send', [App\Http\Controllers\SearchController::class, 'searchSend'])->name('ajax-search-send');
 
 // Route::post('/send', [App\Http\Controllers\PostController::class, 'send']);
 

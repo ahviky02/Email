@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Event\Test;
 
+use const PHP_EOL;
 use function sprintf;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
@@ -54,7 +55,7 @@ final class PrintedUnexpectedOutput implements Event
         return sprintf(
             'Test Printed Unexpected Output%s%s',
             PHP_EOL,
-            $this->output
+            $this->output,
         );
     }
 }
