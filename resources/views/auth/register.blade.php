@@ -8,8 +8,14 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
+
+                        <div class="row mb-3">
+                            <div class="col-md-12 offset-md-4 text-center">
+                                <img id="previewImage" class="img-fluid rounded-circle" style="visibility: hidden;display: none;width:150px; height:150;" src="" alt="Preview Image">
+                            </div>
+                        </div>
 
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
@@ -40,10 +46,35 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Mobile Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="phone" type="phone" class="form-control @error('dob') is-invalid @enderror" name="phone" value="{{ old('phone') }}" required>
+
+                                @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3"> 
+                            <label for="gender" class="col-md-4 col-form-label text-md-end">{{ __('Gender') }}</label>
+                            <div class="col-md-3">
+                                <input type="radio" name="gender" value="male" checked> Male
+                            </div>
+                            <div class="col-md-3">
+                                <input type="radio" name="gender" value="female"> Female
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
                             <label for="dob" class="col-md-4 col-form-label text-md-end">{{ __('Date Of Birth') }}</label>
 
                             <div class="col-md-6">
-                                <input id="dob" type="date" class="form-control " name="dob">
+                                <input id="dob" type="date" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required>
 
                                 @error('dob')
                                 <span class="invalid-feedback" role="alert">
@@ -53,6 +84,19 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label for="image" class="col-md-4 col-form-label text-md-end">{{ __('Upload Image') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+
+                                @error('image')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
 
 
                         <div class="row mb-3">
@@ -90,4 +134,5 @@
         </div>
     </div>
 </div>
+
 @endsection

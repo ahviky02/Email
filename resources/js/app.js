@@ -5,6 +5,19 @@ import $ from 'jquery';
 
 $(document).ready(function () {
 
+  $('#image').on('change',function(){
+    const [file] = image.files
+      if (file) {
+        previewImage.src = URL.createObjectURL(file);
+        $('#previewImage').css({
+          'visibility': 'visible',
+          'display': 'block'
+      });
+      
+      }
+  })
+
+
   $('.delete').on('click',function(){
     $.ajax({
       type: 'DELETE',
